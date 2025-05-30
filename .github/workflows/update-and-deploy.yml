@@ -1,4 +1,4 @@
-name: Update Data and Deploy Site
+name: Update and Deploy Site
 
 on:
   schedule:
@@ -11,43 +11,39 @@ permissions:
   id-token: write
 
 jobs:
-  update-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Install dependencies
-        run: npm install
+      - run: npm install
 
-      - name: Update download data
-        run: npm run update-data
+      - run: npm run update-data
 
-      - name: Commit updated data
-        uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: 'Update download counts data'
-          file_pattern: 'data/download-counts.json'
+          commit_message: "Update download data"
+          file_pattern: "data/download-counts.json"
 
-      - name: Copy site files to output folder
+      - name: Prepare site
         run: |
           mkdir -p public
           cp src/index.html public/
           cp data/download-counts.json public/
 
-      - name: Upload artifact for GitHub Pages
-        uses: actions/upload-pages-artifact@v1
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
         with:
+          name: github-pages
           path: public
 
   deploy:
-    needs: update-and-deploy
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
