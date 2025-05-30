@@ -29,6 +29,6 @@ jobs:
           touch $GITHUB_WORKSPACE/wwwroot/index.html
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: $GITHUB_WORKSPACE/wwwroot
