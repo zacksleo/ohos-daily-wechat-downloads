@@ -1,0 +1,12 @@
+{
+  "name": "ohos-daily-wechat-downloads",
+  "version": "1.0.0",
+  "description": "Project to track WeChat app download counts on HarmonyOS",
+  "main": "index.js",
+  "scripts": {
+    "update-data": "node src/update-data.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {}
+}
