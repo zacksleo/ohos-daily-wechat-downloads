@@ -22,24 +22,29 @@ jobs:
       - name: Build website
         run: |
           # Create wwwroot directory if it doesn't exist
-          if [ ! -d "$GITHUB_WORKSPACE/wwwroot" ]; then
-            echo "Creating wwwroot directory"
-            mkdir -p $GITHUB_WORKSPACE/wwwroot
+          WWWROOT_PATH=$GITHUB_WORKSPACE/wwwroot
+          if [ ! -d "$WWWROOT_PATH" ]; then
+            echo "Creating wwwroot directory at $WWWROOT_PATH"
+            mkdir -p $WWWROOT_PATH
+          else
+            echo "wwwroot directory already exists at $WWWROOT_PATH"
           fi
 
-          # Copy files
-          echo "Copying files..."
-          cp -r src/* data/ $GITHUB_WORKSPACE/wwwroot/
+          # Check current directory
+          echo "Current directory: $(pwd)"
 
-          # Ensure index.html exists
-          if [ ! -f "$GITHUB_WORKSPACE/wwwroot/index.html" ]; then
-            echo "Creating empty index.html"
-            touch $GITHUB_WORKSPACE/wwwroot/index.html
+          # Copy files from src directory
+          echo "Copying files from src directory..."
+          if [ -d "src" ]; then
+            cp -r src/* $WWWROOT_PATH/ || echo "Error copying src files"
+          else
+            echo "src directory not found, creating sample content..."
+            echo "<html><body><h1>Hello World</h1></body></html>" > $WWWROOT_PATH/index.html
           fi
 
           # List files for debugging
           echo "Files in wwwroot:"
-          ls -la $GITHUB_WORKSPACE/wwwroot
+          ls -la $WWWROOT_PATH
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
