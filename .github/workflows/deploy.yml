@@ -19,30 +19,11 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v2
 
-      - name: Build website
+      - name: Create minimal content
         run: |
-          # Create wwwroot directory if it doesn't exist
           WWWROOT_PATH=$GITHUB_WORKSPACE/wwwroot
-          if [ ! -d "$WWWROOT_PATH" ]; then
-            echo "Creating wwwroot directory at $WWWROOT_PATH"
-            mkdir -p $WWWROOT_PATH
-          else
-            echo "wwwroot directory already exists at $WWWROOT_PATH"
-          fi
-
-          # Check current directory
-          echo "Current directory: $(pwd)"
-
-          # Copy files from src directory
-          echo "Copying files from src directory..."
-          if [ -d "src" ]; then
-            cp -r src/* $WWWROOT_PATH/ || echo "Error copying src files"
-          else
-            echo "src directory not found, creating sample content..."
-            echo "<html><body><h1>Hello World</h1></body></html>" > $WWWROOT_PATH/index.html
-          fi
-
-          # List files for debugging
+          mkdir -p $WWWROOT_PATH
+          echo "<html><body><h1>Test Page</h1></body></html>" > $WWWROOT_PATH/index.html
           echo "Files in wwwroot:"
           ls -la $WWWROOT_PATH
 
