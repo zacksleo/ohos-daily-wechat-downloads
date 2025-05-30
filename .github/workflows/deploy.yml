@@ -21,8 +21,14 @@ jobs:
 
       - name: Build website
         run: |
-          # Create wwwroot directory and copy files
-          mkdir -p $GITHUB_WORKSPACE/wwwroot
+          # Create wwwroot directory if it doesn't exist
+          if [ ! -d "$GITHUB_WORKSPACE/wwwroot" ]; then
+            echo "Creating wwwroot directory"
+            mkdir -p $GITHUB_WORKSPACE/wwwroot
+          fi
+
+          # Copy files
+          echo "Copying files..."
           cp -r src/* data/ $GITHUB_WORKSPACE/wwwroot/
 
           # Ensure index.html exists
@@ -30,6 +36,10 @@ jobs:
             echo "Creating empty index.html"
             touch $GITHUB_WORKSPACE/wwwroot/index.html
           fi
+
+          # List files for debugging
+          echo "Files in wwwroot:"
+          ls -la $GITHUB_WORKSPACE/wwwroot
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
