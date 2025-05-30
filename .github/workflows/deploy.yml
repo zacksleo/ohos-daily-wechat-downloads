@@ -25,8 +25,11 @@ jobs:
           mkdir -p $GITHUB_WORKSPACE/wwwroot
           cp -r src/* data/ $GITHUB_WORKSPACE/wwwroot/
 
-          # Create index.html if it doesn't exist
-          touch $GITHUB_WORKSPACE/wwwroot/index.html
+          # Ensure index.html exists
+          if [ ! -f "$GITHUB_WORKSPACE/wwwroot/index.html" ]; then
+            echo "Creating empty index.html"
+            touch $GITHUB_WORKSPACE/wwwroot/index.html
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
