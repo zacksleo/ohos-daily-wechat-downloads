@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ["master"]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
@@ -19,7 +19,16 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v2
 
+      - name: Build website
+        run: |
+          # Create wwwroot directory and copy files
+          mkdir -p $GITHUB_WORKSPACE/wwwroot
+          cp -r src/* data/ $GITHUB_WORKSPACE/wwwroot/
+
+          # Create index.html if it doesn't exist
+          touch $GITHUB_WORKSPACE/wwwroot/index.html
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: src
+          path: $GITHUB_WORKSPACE/wwwroot
